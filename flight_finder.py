@@ -5,8 +5,9 @@ from tabulate import tabulate
 from tokens import TWILIO_AUTH_TOKEN, TWILIO_SID, FR_24_API_ENDPOINT, FR_24_API_KEY, TWILIO_PHONE, MY_PHONE
 
 
-# ✅ Define interesting zones before anything else
-
+#  Define interesting zones 
+     # I would suggest that if you want to add or subtract zones to ask an AI what the bounds are
+     # Scoring can be changed here
 interesting_zones = [
 
 {"name": "Taiwan Strait",
@@ -51,7 +52,7 @@ interesting_zones = [
 
 ]
 
-# ✅ Define location scoring BEFORE calling it
+#  Define location scoring BEFORE calling it
 def score_location(lat, lon):
     for zone in interesting_zones:
         lat_min, lat_max, lon_min, lon_max = zone["bounds"]
@@ -76,7 +77,7 @@ try:
     response.raise_for_status()
     data = response.json()
 
-# This prints all data
+# This prints all data which was only used in dev
     #print(json.dumps(data, indent=4))
 
     flights_list = data.get("data", [])
@@ -100,7 +101,7 @@ for flight in flights_list:
     lat = flight.get("lat")
     lon = flight.get("lon")
 
-    # ✅ Aircraft scoring
+    #  Aircraft scoring - Change these values here if you want to change aircraft scoring weights
     if plane_type in ["B52", "F22", "F35", "U2", "E3TF", "RC135"]:
         score += 5
     elif plane_type in ["P8", "EUFI", "F16", "F15", "F18", "C5", "C5M", "Q4"]:
@@ -112,7 +113,7 @@ for flight in flights_list:
     elif plane_type in ["TEX2"]:
         score += 1
 
-    # ✅ Location scoring
+    #  Location scoring
     location_score = 0
     if lat is not None and lon is not None:
         location_score = score_location(lat, lon)
@@ -127,7 +128,7 @@ for flight in flights_list:
       "flight": flight  # keep the full JSON for later
     })
 
-# ✅ Pick the top scoring flight
+#  Pick the top scoring flight
 if scores:
     top_flight_data = max(scores, key=lambda x: x["total_score"])
     flight_info = top_flight_data["flight"]
@@ -159,6 +160,7 @@ if scores:
     FR24 URL: {fr24_url}
     """
 
+     #This is sending the message out to WhatsApp vio Twilio
     from twilio.rest import Client
     account_sid = TWILIO_SID
     auth_token = TWILIO_AUTH_TOKEN
@@ -174,7 +176,7 @@ if scores:
 else:
     print("No flights to evaluate.")
 
-#https://www.flightradar24.com/KING17
+     # Example of URL + callsign: https://www.flightradar24.com/KING17
 
 print(tabulate(columns, headers=["Field", "Value"], tablefmt="github"))
 
