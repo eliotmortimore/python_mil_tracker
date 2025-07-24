@@ -2,7 +2,8 @@ import requests
 import json
 from tabulate import tabulate
 
-from tokens import TWILIO_AUTH_TOKEN, TWILIO_SID, FR_24_API_ENDPOINT, FR_24_API_KEY, TWILIO_PHONE, MY_PHONE, OPENAI_API_KEY
+#Commented out token import to work with Render.com [Uncomment if you are running locally}
+#from tokens import TWILIO_AUTH_TOKEN, TWILIO_SID, FR_24_API_ENDPOINT, FR_24_API_KEY, TWILIO_PHONE, MY_PHONE, OPENAI_API_KEY
 
 
 def main():
