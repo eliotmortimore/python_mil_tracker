@@ -33,7 +33,7 @@ def main():
     headers = {
         "Accept": "application/json",
         "Accept-Version": "v1",
-        "Authorization": f"Bearer {FR_24_API_KEY}"
+        "Authorization": f"Bearer {os.environ.get('FR_24_API_KEY')}"
     }
 
     try:
