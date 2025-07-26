@@ -3,7 +3,7 @@ import json
 from tabulate import tabulate
 import os
 
-from tokens import TWILIO_AUTH_TOKEN, TWILIO_SID, FR_24_API_ENDPOINT, FR_24_API_KEY, TWILIO_PHONE, MY_PHONE, OPENAI_API_KEY
+#from tokens import TWILIO_AUTH_TOKEN, TWILIO_SID, FR_24_API_ENDPOINT, FR_24_API_KEY, TWILIO_PHONE, MY_PHONE, OPENAI_API_KEY
 
 
 def main():
