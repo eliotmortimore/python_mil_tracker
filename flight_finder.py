@@ -1,9 +1,9 @@
 import requests
 import json
 from tabulate import tabulate
+import os
 
-#Commented out token import to work with Render.com [Uncomment if you are running locally}
-#from tokens import TWILIO_AUTH_TOKEN, TWILIO_SID, FR_24_API_ENDPOINT, FR_24_API_KEY, TWILIO_PHONE, MY_PHONE, OPENAI_API_KEY
+from tokens import TWILIO_AUTH_TOKEN, TWILIO_SID, FR_24_API_ENDPOINT, FR_24_API_KEY, TWILIO_PHONE, MY_PHONE, OPENAI_API_KEY
 
 
 def main():
@@ -28,7 +28,7 @@ def main():
                 return zone["score"]
         return 0
 
-    url = FR_24_API_ENDPOINT
+    url = os.environ.get('FR_24_API_ENDPOINT')
     params = {'bounds': '90,-90,-180,180'}
     headers = {
         "Accept": "application/json",
@@ -99,7 +99,7 @@ def main():
         ]
 
         from openai import OpenAI
-        client = OpenAI(api_key=OPENAI_API_KEY)
+        client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
 
         flight_context_text = f"""
         Aircraft: {top_flight_data["plane_type"]}
@@ -124,14 +124,14 @@ def main():
         print("Sending WhatsApp message:", message_body)
 
         from twilio.rest import Client
-        account_sid = TWILIO_SID
-        auth_token = TWILIO_AUTH_TOKEN
+        account_sid = os.environ.get('TWILIO_SID')
+        auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
         client = Client(account_sid, auth_token)
 
         message = client.messages.create(
             body=message_body,
-            from_=f"whatsapp:{TWILIO_PHONE}",
-            to=f"whatsapp:{MY_PHONE}"
+            from_=f"whatsapp:{os.environ.get('TWILIO_PHONE')}",
+            to=f"whatsapp:{os.environ.get('MY_PHONE')}"
         )
         print("WhatsApp message sent! SID:", message.sid)
 
